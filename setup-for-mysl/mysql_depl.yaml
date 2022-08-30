@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: mysql-deploy
+ labels:
+         app: mysql-database
+spec:
+  serviceName: mysql-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql
+        name: mysql-database
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        ports:
+          - containerPort: 3306
+            name: mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql-root-password
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql-user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql-password
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql-database
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+      finalizers: null
+    spec:
+      resources:
+        requests:
+          storage: 256Mi
+      accessModes:
+      - ReadWriteOnce

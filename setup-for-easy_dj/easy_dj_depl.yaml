@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: easy-dj
+  labels: 
+    app: easy-dj-depl
+spec:
+  selector:
+   matchLabels:
+    app: easy-dj
+  template:
+    metadata:
+      labels:
+        app: easy-dj
+    spec:
+      containers:
+        - image: vdq2010/easy_dj:latest
+          name: easy-dj-app
+          tty: true
+          ports:
+            - containerPort: 8000

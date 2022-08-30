@@ -1,0 +1,68 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule5"
+spec:
+  endpointSelector:
+    matchLabels:
+      app: mysql-backup
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        app: mysql
+    toPorts:
+    - ports:
+      - port: "3306"
+        protocol: TCP
+
+---
+
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule6"
+spec:
+  endpointSelector:
+    matchLabels:
+      app: mysql
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        app: easy_dj
+    toPorts:
+    - ports:
+      - port: "8000"
+        protocol: TCP
+---
+
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule8"
+spec:
+  endpointSelector:
+    matchLabels:
+      app: easy-dj
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        app: mysql
+    toPorts:
+    - ports:
+      - port: "3306"
+        protocol: TCP
+---
+
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule9"
+spec:
+  endpointSelector:
+    matchLabels:
+      app: easy-dj
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        app: wordpress
+

@@ -1,0 +1,77 @@
+# INGRESS
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule1"
+spec:
+  description: "Restrict connect from easy_dj to mysql"
+  endpointSelector:
+    matchLabels:
+      app: mysql
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        app: easy-dj
+    toPorts:
+    - ports:
+      - port: "3306"
+        protocol: TCP
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule2"
+spec:
+  description: "Restrict connect from wordpress-app to mysql"
+  endpointSelector:
+    matchLabels:
+      app: mysql
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        app: wordpress-app
+    toPorts:
+    - ports:
+      - port: "3306"
+        protocol: TCP
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule3"
+spec:
+  description: "Restrict connect from mysql-backup to mysql"
+  endpointSelector:
+    matchLabels:
+      app: mysql
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        app: mysql-backup
+    toPorts:
+    - ports:
+      - port: "3306"
+        protocol: TCP
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "rule4"
+spec:
+  description: "Restrict connect from wordpress-app to easy_dj"
+  endpointSelector:
+    matchLabels:
+      app: easy-dj
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        app: wordpress-app
+    toPorts:
+    - ports:
+      - port: "8000"
+        protocol: TCP
+---
+
+
+
+

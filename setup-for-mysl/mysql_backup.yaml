@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mysql-backup
+  labels: 
+    app: mysql-backup
+spec:
+  schedule: "*/3 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: mysql-backup
+        spec:
+          containers:
+          - name: ubuntu
+            image: vdq2010/ubuntu-mysql-cli:latest
+            command: ["/bin/sh","-c"]
+            args: ["mysqldump -P 3306 -h 10.101.152.131 --user=root --password=abc --databases list_news > /tmp/backup_database.sql"]
+            volumeMounts:
+              - name: mysqldump
+                mountPath: /tmp
+          volumes:
+            - name: mysqldump
+              hostPath:
+                path: /mysql_app_backup
+          restartPolicy: OnFailure
+---
